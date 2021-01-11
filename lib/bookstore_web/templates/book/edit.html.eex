@@ -1,0 +1,6 @@
+<h2>Edit book</h2>
+
+<%= render "form.html", changeset: @changeset, authors: @authors,
+                        action: Routes.book_path(@conn, :update, @book) %>
+
+<%= link "Back", to: Routes.book_path(@conn, :index) %>

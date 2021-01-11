@@ -1,0 +1,28 @@
+<h2>Listing authors</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for author <- @authors do %>
+    <tr>
+      <td><%= author.name %></td>
+      <td><%= author.email_address %></td>
+
+      <td class="text-right">
+        <%= link "Show", to: Routes.author_path(@conn, :show, author), class: "btn btn-default btn-xs" %>
+        <%= link "Edit", to: Routes.author_path(@conn, :edit, author), class: "btn btn-default btn-xs" %>
+        <%= link "Delete", to: Routes.author_path(@conn, :delete, author), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<%= link "New author", to: Routes.author_path(@conn, :new) %>
