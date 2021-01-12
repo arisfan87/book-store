@@ -14,12 +14,14 @@
 
 </ul>
 
+<h3>Author's book list</h3>
+
 <table class="table">
   <thead>
     <tr>
       <th>Title</th>
       <th>Isbn</th>
-
+      <th>Action</th>
       <th></th>
     </tr>
   </thead>
@@ -38,3 +40,5 @@
 <% end %>
   </tbody>
 </table>
+
+<%= link "Back", to: Routes.author_path(@conn, :index) %>

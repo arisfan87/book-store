@@ -7,15 +7,20 @@ defmodule BookstoreWeb.BookController do
   alias Bookstore.Repo
   import Ecto.Query, only: [from: 2]
 
+  #Logger.debug "Var value: #{inspect(books)}"
+  
   def index(conn, _params) do
-    render(conn, "index.html", books: Repo.all(Book))
+    conn
+    |> assign(:books, Book |> Repo.all)
+    |> render("index.html")
   end
 
   def show(conn, %{"id" => id}) do
-    
     case Repo.get(Book, id) do
       book when is_map(book) ->
-        render conn, "show.html", book: book
+      conn
+      |> assign(:book, book)
+      |> render("show.html")
       _ ->
         redirect conn, to: Router.Helpers.page_path(conn, :show, "unauthorized")
     end
@@ -23,11 +28,10 @@ defmodule BookstoreWeb.BookController do
   
   def new(conn, _params) do
     query = from(a in Author, select: {a.email_address, a.id})
-    authors = Repo.all(query)
     conn
-  |> assign(:changeset, Book.changeset(%Book{}))
-  |> assign(:authors, authors)
-  |> render("new.html")
+    |> assign(:changeset, Book.changeset(%Book{}))
+    |> assign(:authors, Repo.all(query))
+    |> render("new.html")
   end
 
   def create(conn, %{"book" => book_params}) do
@@ -38,7 +42,12 @@ defmodule BookstoreWeb.BookController do
         |> put_flash(:info, "Book created successfully.")
         |> redirect(to: Routes.book_path(conn, :index))
       {:error, changeset} ->
-        render(conn, "new.html", changeset: changeset, authors: Repo.all(from a in Author, select: {a.email_address, a.id}))
+        render(
+          conn
+          |> assign(:changeset, changeset)
+          |> assign(:authors, Repo.all(from a in Author, select: {a.email_address, a.id}))
+          |> render("new.html")
+        )
     end
   end
 
@@ -62,9 +71,19 @@ defmodule BookstoreWeb.BookController do
       {:ok, book} ->
         conn
         |> put_flash(:info, "Book updated successfully.")
-        |> redirect(to: Routes.book_path(conn, :show, book, authors: Repo.all(from a in Author, select: {a.email_address, a.id})))
+        |> redirect(to: Routes.book_path(
+          conn
+          |> assign(:changeset, changeset)
+          |> assign(:authors, Repo.all(from a in Author, select: {a.email_address, a.id}))
+          |> assign(:book, book)
+          |> render("edit.html"))
+          )
       {:error, changeset} ->
-        render(conn, "edit.html", book: book, changeset: changeset, authors: Repo.all(from a in Author, select: {a.email_address, a.id}))
+        conn
+        |> assign(:changeset, changeset)
+        |> assign(:authors, Repo.all(from a in Author, select: {a.email_address, a.id}))
+        |> assign(:book, book)
+        |> render("edit.html")
     end
   end
 

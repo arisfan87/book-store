@@ -2,7 +2,7 @@ defmodule Bookstore.Book do
   use Ecto.Schema
   import Ecto.Changeset
   import Ecto.Query, only: [from: 2]
-
+  alias Bookstore.Author
   schema "books" do
     field :isbn, :string
     field :title, :string

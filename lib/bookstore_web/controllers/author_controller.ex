@@ -14,8 +14,8 @@ defmodule BookstoreWeb.AuthorController do
 
   def show(conn, %{"id" => id}) do
     books = Book
-                |> Book.get_author_books(id)
-                |> Repo.all
+            |> Book.get_author_books(id)
+            |> Repo.all
 
     Logger.debug "Var value: #{inspect(books)}"
 
@@ -32,7 +32,9 @@ defmodule BookstoreWeb.AuthorController do
 
   def new(conn, _params) do
     changeset = Author.changeset(%Author{}, _params)
-    render(conn, "new.html", changeset: changeset)
+      conn
+      |> assign(:changeset, changeset)
+      |> render("new.html")
   end
 
   def create(conn, %{"author" => author_params}) do
@@ -43,14 +45,19 @@ defmodule BookstoreWeb.AuthorController do
         |> put_flash(:info, "Author created successfully.")
         |> redirect(to: Routes.author_path(conn, :index))
       {:error, changeset} ->
-        render(conn, "new.html", changeset: changeset)
+        conn
+        |> assign(:changeset, changeset)
+        |> render("new.html")
     end
   end
 
   def edit(conn, %{"id" => id}) do
     author = Repo.get!(Author, id)
     changeset = Author.changeset(author)
-    render(conn, "edit.html", author: author, changeset: changeset)
+      conn
+      |> assign(:changeset, changeset)
+      |> assign(:author, author)
+      |> render("edit.html")
   end
 
   def update(conn, %{"id" => id, "author" => author_params}) do
@@ -63,7 +70,10 @@ defmodule BookstoreWeb.AuthorController do
         |> put_flash(:info, "Author updated successfully.")
         |> redirect(to: Routes.author_path(conn, :show, author))
       {:error, changeset} ->
-        render(conn, "edit.html", author: author, changeset: changeset)
+        conn
+        |> assign(:changeset, changeset)
+        |> assign(:author, author)
+        |> render("edit.html")
     end
   end
 
