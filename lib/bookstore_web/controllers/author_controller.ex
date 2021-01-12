@@ -1,10 +1,11 @@
 defmodule BookstoreWeb.AuthorController do
   use BookstoreWeb, :controller
-
+  import Ecto.Query, only: [from: 2]
   require Logger
 
   alias BookstoreWeb.Router
   alias Bookstore.Author
+  alias Bookstore.Book
   alias Bookstore.Repo
 
   def index(conn, _params) do
@@ -12,9 +13,18 @@ defmodule BookstoreWeb.AuthorController do
   end
 
   def show(conn, %{"id" => id}) do
+    books = Book
+                |> Book.get_author_books(id)
+                |> Repo.all
+
+    Logger.debug "Var value: #{inspect(books)}"
+
     case Repo.get(Author, id) do
       author when is_map(author) ->
-        render conn, "show.html", author: author
+        render conn
+        |> assign(:books, books)
+        |> assign(:author, author)
+        |> render("show.html")
       _ ->
         redirect conn, to: Router.Helpers.page_path(conn, :show, "unauthorized")
     end

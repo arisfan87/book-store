@@ -1,6 +1,7 @@
 defmodule Bookstore.Author do
   use Ecto.Schema
   import Ecto.Changeset
+  import Ecto.Query, only: [from: 2]
 
   schema "authors" do
     field :email_address, :string

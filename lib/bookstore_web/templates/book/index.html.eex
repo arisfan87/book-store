@@ -1,5 +1,7 @@
 <h2>Listing books</h2>
 
+<%= link "New book", to: Routes.book_path(@conn, :new) %>
+
 <table class="table">
   <thead>
     <tr>
@@ -26,5 +28,3 @@
 <% end %>
   </tbody>
 </table>
-
-<%= link "New book", to: Routes.book_path(@conn, :new) %>

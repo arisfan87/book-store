@@ -1,5 +1,7 @@
 <h2>Listing authors</h2>
 
+<%= link "New author", to: Routes.author_path(@conn, :new) %>
+
 <table class="table">
   <thead>
     <tr>
@@ -24,5 +26,3 @@
 <% end %>
   </tbody>
 </table>
-
-<%= link "New author", to: Routes.author_path(@conn, :new) %>

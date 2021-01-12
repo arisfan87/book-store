@@ -14,5 +14,27 @@
 
 </ul>
 
-<%= link "Edit", to: Routes.author_path(@conn, :edit, @author) %>
-<%= link "Back", to: Routes.author_path(@conn, :index) %>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Isbn</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for book <- @books do %>
+    <tr>
+      <td><%= book.title %></td>
+      <td><%= book.isbn %></td>
+
+      <td class="text-right">
+        <%= link "Show", to: Routes.book_path(@conn, :show, book), class: "btn btn-default btn-xs" %>
+        <%= link "Edit", to: Routes.book_path(@conn, :edit, book), class: "btn btn-default btn-xs" %>
+        <%= link "Delete", to: Routes.book_path(@conn, :delete, book), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
