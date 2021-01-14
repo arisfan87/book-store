@@ -1,5 +1,7 @@
 # Bookstore
 
+Simple CRUD web app written in Elixir, Phoenix, PostgreSql.
+
 To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`
